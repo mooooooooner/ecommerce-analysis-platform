@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电商数据分析仪表盘</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>电商用户行为数据分析平台</h1>
+        </header>
+        <main>
+            <div class="chart-grid">
+                <div class="chart-container wide">
+                    <h2>每日销售额趋势</h2>
+                    <div id="sales-chart" class="chart-box"></div>
+                </div>
+                <div class="chart-container">
+                    <h2>用户省份分布（地图）</h2>
+                    <div id="province-map-chart" class="chart-box"></div>
+                </div>
+                <div class="chart-container">
+                    <h2>用户省份分布 Top 10</h2>
+                    <div id="province-bar-chart" class="chart-box"></div>
+                </div>
+
+                <!-- 预留的可扩展图表 -->
+                <div class="chart-container">
+                    <h2>用户性别分布</h2>
+                    <div id="gender-chart" class="chart-box"></div>
+                </div>
+                <div class="chart-container">
+                    <h2>热销品牌 Top 5</h2>
+                    <div id="brand-chart" class="chart-box"></div>
+                </div>
+                
+                 <!-- 更多预留位置 -->
+                <div class="chart-container placeholder">
+                    <h2>年龄段分布</h2>
+                    <div class="placeholder-text">待开发...</div>
+                </div>
+                <div class="chart-container placeholder">
+                    <h2>商品类别统计</h2>
+                    <div class="placeholder-text">待开发...</div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>课程设计 - 数据可视化项目 &copy; 2025</p>
+        </footer>
+    </div>
+    <script src="js/echarts.min.js"></script>
+    <!-- 需要下载中国地图的JS文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
+    
