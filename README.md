@@ -26,18 +26,22 @@
     -   前端使用平滑的面积折线图展示销售趋势。
 
 ## 🏗️ 项目结构
-internship/
-├── pom.xml                 # Maven项目配置
-├── README.md               # 项目说明文档
-└── src/
-    └── main/
-        ├── java/
-        │   └── com/chinasoft/shop/
-        │       ├── scala/  # Spark分析任务 (Scala)
-        │       └── web/    # Spring Boot后端服务 (Java)
-        └── resources/
-            ├── application.properties  # Spring Boot配置文件
-            └── static/                 # 前端静态资源 (HTML/CSS/JS)
+
+
+    internship/
+    ├── pom.xml                 # Maven项目配置
+    ├── README.md               # 项目说明文档
+    └── src/
+        └── main/
+            ├── java/
+            │   └── com/chinasoft/shop/
+            │       ├── scala/  # Spark分析任务 (Scala)
+            │       └── web/    # Spring Boot后端服务 (Java)
+            └── resources/
+                ├── application.properties  # Spring Boot配置文件
+                └── static/                 # 前端静态资源 (HTML/CSS/JS)
+    
+
 ## 🏃‍♀️ 如何运行
 
 ### 步骤1: 运行Spark分析任务
