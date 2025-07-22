@@ -4,57 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>电商数据分析仪表盘</title>
-    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/map/js/china.js"></script>
+    
+    <!-- Tailwind 配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0052cc',
+                        secondary: '#ff9900',
+                        neutral: '#f5f7fa',
+                        dark: '#1d2129',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .chart-box {
+                height: 300px;
+                width: 100%;
+            }
+            .chart-container {
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+            }
+            .chart-grid {
+                display: grid;
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+                gap: 1.5rem;
+            }
+            @media (min-width: 768px) {
+                .chart-grid {
+                    grid-template-columns: repeat(2, minmax(0, 1fr));
+                }
+                .wide {
+                    grid-column: span 2 / span 2;
+                }
+            }
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
-        <header>
-            <h1>电商用户行为数据分析平台</h1>
-        </header>
-        <main>
-            <div class="chart-grid">
-                <div class="chart-container wide">
-                    <h2>每日销售额趋势</h2>
-                    <div id="sales-chart" class="chart-box"></div>
-                </div>
-                <div class="chart-container">
-                    <h2>用户省份分布（地图）</h2>
-                    <div id="province-map-chart" class="chart-box"></div>
-                </div>
-                <div class="chart-container">
-                    <h2>用户省份分布 Top 10</h2>
-                    <div id="province-bar-chart" class="chart-box"></div>
-                </div>
-
-                <!-- 预留的可扩展图表 -->
-                <div class="chart-container">
-                    <h2>用户性别分布</h2>
-                    <div id="gender-chart" class="chart-box"></div>
-                </div>
-                <div class="chart-container">
-                    <h2>热销品牌 Top 5</h2>
-                    <div id="brand-chart" class="chart-box"></div>
-                </div>
-                
-                 <!-- 更多预留位置 -->
-                <div class="chart-container placeholder">
-                    <h2>年龄段分布</h2>
-                    <div class="placeholder-text">待开发...</div>
-                </div>
-                <div class="chart-container placeholder">
-                    <h2>商品类别统计</h2>
-                    <div class="placeholder-text">待开发...</div>
+<body class="bg-neutral min-h-screen">
+    <header class="bg-primary text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold flex items-center">
+                <i class="fa fa-bar-chart mr-3"></i>电商数据分析仪表盘
+            </h1>
+            <div class="flex items-center space-x-4">
+                <button class="bg-white/20 hover:bg-white/30 transition-colors px-4 py-2 rounded-lg flex items-center">
+                    <i class="fa fa-refresh mr-2"></i>刷新数据
+                </button>
+                <div class="relative">
+                    <button class="flex items-center">
+                        <i class="fa fa-user-circle-o text-xl"></i>
+                    </button>
                 </div>
             </div>
-        </main>
-        <footer>
-            <p>课程设计 - 数据可视化项目 &copy; 2025</p>
-        </footer>
-    </div>
-    <script src="js/echarts.min.js"></script>
-    <!-- 需要下载中国地图的JS文件 -->
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="chart-grid">
+            <div class="chart-container wide">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-line-chart mr-2 text-primary"></i>每日销售额趋势
+                </h2>
+                <div id="sales-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-map-marker mr-2 text-primary"></i>用户省份分布（地图）
+                </h2>
+                <div id="province-map-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-bar-chart mr-2 text-primary"></i>用户省份分布 Top 10
+                </h2>
+                <div id="province-bar-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-venus-mars mr-2 text-primary"></i>用户性别分布
+                </h2>
+                <div id="gender-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-tags mr-2 text-primary"></i>热销品牌 Top 5
+                </h2>
+                <div id="brand-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-users mr-2 text-secondary"></i>用户年龄段分布
+                </h2>
+                <div id="age-chart" class="chart-box"></div>
+            </div>
+            <div class="chart-container">
+                <h2 class="text-xl font-semibold mb-3 flex items-center">
+                    <i class="fa fa-shopping-bag mr-2 text-secondary"></i>热门商品类别销售额
+                </h2>
+                <div id="category-chart" class="chart-box"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white py-6 mt-10">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <h3 class="text-lg font-semibold mb-2">电商数据分析仪表盘</h3>
+                    <p class="text-gray-400 text-sm">© 2025 电商数据分析平台. 保留所有权利.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-github text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-twitter text-xl"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">
+                        <i class="fa fa-linkedin text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
     <script src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
-    <script src="js/app.js"></script>
+    <script src="/js/app.js"></script>
 </body>
-</html>
-    
+</html>    

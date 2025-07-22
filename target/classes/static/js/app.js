@@ -1,58 +1,39 @@
-const API_BASE_URL = 'http://localhost:8080/api/data';
 document.addEventListener('DOMContentLoaded', function() {
+    const API_BASE_URL = 'http://localhost:8080/api/data';
 
     // 初始化所有图表
-    initSalesChart();
-    initProvinceCharts();
-    initGenderChart(); // 加载预留的图表
-    initBrandChart(); // 加载预留的图表
+    initSalesChart(API_BASE_URL);
+    initProvinceCharts(API_BASE_URL);
+    initGenderChart(API_BASE_URL);
+    initBrandChart(API_BASE_URL);
+    
+    // --- 调用新增的图表初始化函数 ---
+    initAgeChart(API_BASE_URL);
+    initCategoryChart(API_BASE_URL);
 });
 
 /**
  * 每日销售额趋势图
  */
-async function initSalesChart() {
+async function initSalesChart(baseUrl) {
     const chart = echarts.init(document.getElementById('sales-chart'));
     chart.showLoading();
 
     try {
-        const response = await fetch(`${API_BASE_URL}/sales`);
+        const response = await fetch(`${baseUrl}/sales`);
         const data = await response.json();
 
         const dates = data.map(item => item.date);
         const values = data.map(item => item.totalSales);
 
         const option = {
-            tooltip: {
-                trigger: 'axis',
-                formatter: '{b}<br/>销售额: ¥ {c}'
-            },
-            xAxis: {
-                type: 'category',
-                boundaryGap: false,
-                data: dates
-            },
-            yAxis: {
-                type: 'value',
-                axisLabel: {
-                    formatter: '¥ {value}'
-                }
-            },
-            grid: {
-                left: '3%',
-                right: '4%',
-                bottom: '3%',
-                containLabel: true
-            },
+            tooltip: { trigger: 'axis', formatter: '{b}<br/>销售额: ¥ {c}' },
+            xAxis: { type: 'category', boundaryGap: false, data: dates },
+            yAxis: { type: 'value', axisLabel: { formatter: '¥ {value}' } },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
             series: [{
-                name: '销售额',
-                type: 'line',
-                smooth: true,
-                areaStyle: {},
-                data: values,
-                itemStyle: {
-                    color: '#0052cc'
-                }
+                name: '销售额', type: 'line', smooth: true, areaStyle: {},
+                data: values, itemStyle: { color: '#0052cc' }
             }]
         };
         chart.setOption(option);
@@ -66,68 +47,42 @@ async function initSalesChart() {
 /**
  * 省份分布图（地图和柱状图）
  */
-async function initProvinceCharts() {
+async function initProvinceCharts(baseUrl) {
     const mapChart = echarts.init(document.getElementById('province-map-chart'));
     const barChart = echarts.init(document.getElementById('province-bar-chart'));
     mapChart.showLoading();
     barChart.showLoading();
 
     try {
-        const response = await fetch(`${API_BASE_URL}/province`);
+        const response = await fetch(`${baseUrl}/province`);
         const data = await response.json();
         
-        // 准备地图数据
         const mapData = data.map(item => ({ name: item.province, value: item.count }));
-        
-        // 准备柱状图数据 (Top 10)
-        const top10Data = data.slice(0, 10).reverse(); // reverse for horizontal bar
+        const top10Data = data.slice(0, 10).reverse();
         const topProvinces = top10Data.map(item => item.province);
         const topCounts = top10Data.map(item => item.count);
-        
-        const maxCount = Math.max(...data.map(d => d.count));
+        const maxCount = data.length > 0 ? Math.max(...data.map(d => d.count)) : 0;
 
-        // 地图配置
         const mapOption = {
-            tooltip: {
-                trigger: 'item',
-                formatter: '{b}: {c} 人'
-            },
+            tooltip: { trigger: 'item', formatter: '{b}: {c} 人' },
             visualMap: {
-                min: 0,
-                max: maxCount,
-                left: 'left',
-                top: 'bottom',
-                text: ['高', '低'],
-                calculable: true,
-                inRange: {
-                    color: ['#e0f3ff', '#0052cc']
-                }
+                min: 0, max: maxCount, left: 'left', top: 'bottom',
+                text: ['高', '低'], calculable: true,
+                inRange: { color: ['#e0f3ff', '#0052cc'] }
             },
             series: [{
-                name: '用户省份分布',
-                type: 'map',
-                map: 'china',
-                roam: true,
-                label: {
-                    show: false
-                },
-                data: mapData
+                name: '用户省份分布', type: 'map', map: 'china',
+                roam: true, label: { show: false }, data: mapData
             }]
         };
 
-        // 柱状图配置
         const barOption = {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: { type: 'shadow' }
-            },
+            tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
             xAxis: { type: 'value', boundaryGap: [0, 0.01] },
             yAxis: { type: 'category', data: topProvinces },
             grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
             series: [{
-                name: '用户数',
-                type: 'bar',
-                data: topCounts,
+                name: '用户数', type: 'bar', data: topCounts,
                 itemStyle: { color: '#0052cc' }
             }]
         };
@@ -143,31 +98,24 @@ async function initProvinceCharts() {
     }
 }
 
-
 /**
- * 【可扩展】性别分布图
+ * 性别分布图
  */
-async function initGenderChart() {
+async function initGenderChart(baseUrl) {
     const chart = echarts.init(document.getElementById('gender-chart'));
     chart.showLoading();
     try {
-        const response = await fetch(`${API_BASE_URL}/gender`);
-        const data = await response.json(); // API返回 [{name: '男性', value: 123}, ...]
+        const response = await fetch(`${baseUrl}/gender`);
+        const data = await response.json();
 
         const option = {
             tooltip: { trigger: 'item', formatter: '{a} <br/>{b}: {c} ({d}%)' },
             legend: { top: 'bottom' },
             series: [{
-                name: '性别分布',
-                type: 'pie',
-                radius: '50%',
+                name: '性别分布', type: 'pie', radius: '55%',
                 data: data,
                 emphasis: {
-                    itemStyle: {
-                        shadowBlur: 10,
-                        shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
-                    }
+                    itemStyle: { shadowBlur: 10, shadowOffsetX: 0, shadowColor: 'rgba(0, 0, 0, 0.5)' }
                 }
             }]
         };
@@ -180,19 +128,22 @@ async function initGenderChart() {
 }
 
 /**
- * 【可扩展】品牌销售图
+ * 品牌销售图
  */
-async function initBrandChart() {
+async function initBrandChart(baseUrl) {
     const chart = echarts.init(document.getElementById('brand-chart'));
     chart.showLoading();
     try {
-        const response = await fetch(`${API_BASE_URL}/brand`);
-        const data = await response.json(); // API返回 [{name: '品牌A', value: 123}, ...]
+        const response = await fetch(`${baseUrl}/brand`);
+        const data = await response.json();
 
         const option = {
-            tooltip: { trigger: 'item', formatter: '{b}: ¥{c}' },
+            tooltip: { trigger: 'item', formatter: '{b}<br/>销售额: ¥{c}' },
             series: [{
                 type: 'treemap',
+                roam: false, // 禁止拖拽
+                nodeClick: false, // 点击无反应
+                breadcrumb: { show: false }, // 隐藏面包屑导航
                 data: data
             }]
         };
@@ -203,4 +154,99 @@ async function initBrandChart() {
         chart.hideLoading();
     }
 }
-    
+
+// --- 以下为新增的图表函数 ---
+
+/**
+ * 年龄段分布图 (饼图)
+ */
+async function initAgeChart(baseUrl) {
+    const chart = echarts.init(document.getElementById('age-chart'));
+    chart.showLoading();
+    try {
+        const response = await fetch(`${baseUrl}/age`);
+        const data = await response.json();
+
+        const option = {
+            tooltip: { trigger: 'item', formatter: '{a} <br/>{b}: {c}人 ({d}%)' },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                top: 'center'
+            },
+            series: [{
+                name: '年龄段分布',
+                type: 'pie',
+                radius: ['40%', '70%'], // 制作成环形图
+                avoidLabelOverlap: false,
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: '20',
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: data
+            }]
+        };
+        chart.setOption(option);
+    } catch (error) {
+        console.error('Failed to load age data:', error);
+    } finally {
+        chart.hideLoading();
+    }
+}
+
+/**
+ * 热门商品类别销售额 (条形图)
+ */
+async function initCategoryChart(baseUrl) {
+    const chart = echarts.init(document.getElementById('category-chart'));
+    chart.showLoading();
+    try {
+        const response = await fetch(`${baseUrl}/category`);
+        const data = await response.json();
+        
+        // 为了条形图从上到下按销售额降序显示，需要对数据进行升序排序
+        const sortedData = data.sort((a, b) => a.value - b.value);
+
+        const categories = sortedData.map(item => item.name);
+        const sales = sortedData.map(item => item.value);
+
+        const option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: { type: 'shadow' },
+                formatter: '{b}<br/>销售额: ¥{c}'
+            },
+            xAxis: { 
+                type: 'value',
+                axisLabel: {
+                    formatter: '¥{value}'
+                }
+            },
+            yAxis: { type: 'category', data: categories },
+            grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
+            series: [{
+                name: '销售额',
+                type: 'bar',
+                data: sales,
+                itemStyle: {
+                    color: '#ff9900' // 使用新颜色
+                }
+            }]
+        };
+        chart.setOption(option);
+    } catch (error) {
+        console.error('Failed to load category data:', error);
+    } finally {
+        chart.hideLoading();
+    }
+}    

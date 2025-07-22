@@ -2,6 +2,9 @@ package com.chinasoft.shop.web.controller;
 
 import com.chinasoft.shop.web.model.DailySales;
 import com.chinasoft.shop.web.model.ProvinceCount;
+// 导入新的 Repository
+import com.chinasoft.shop.web.repository.AgeDistributionRepository;
+import com.chinasoft.shop.web.repository.CategorySalesRepository;
 import com.chinasoft.shop.web.repository.DailySalesRepository;
 import com.chinasoft.shop.web.repository.ProvinceCountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/data")
@@ -21,6 +27,14 @@ public class DataViewController {
     @Autowired
     private DailySalesRepository dailySalesRepository;
 
+    // --- 注入新增的 Repository ---
+    // @Autowired
+    // private AgeDistributionRepository ageDistributionRepository;
+
+    // @Autowired
+    // private CategorySalesRepository categorySalesRepository;
+
+
     @GetMapping("/province")
     public List<ProvinceCount> getProvinceData() {
         return provinceCountRepository.findAllByOrderByCountDesc();
@@ -31,15 +45,10 @@ public class DataViewController {
         return dailySalesRepository.findAllByOrderByDateAsc();
     }
 
-    // --- 为未来扩展预留的接口 ---
-
     @GetMapping("/gender")
     public List<Map<String, Object>> getGenderData() {
         // TODO: 合作者需要实现从 'gender_distribution' 表读取数据
-        // return genderRepository.findAll();
-        // 返回模拟数据
         List<Map<String, Object>> result = new ArrayList<>();
-
         Map<String, Object> item1 = new HashMap<>();
         item1.put("name", "男性");
         item1.put("value", 1543);
@@ -55,14 +64,12 @@ public class DataViewController {
         item3.put("value", 320);
         result.add(item3);
 
-        return Collections.unmodifiableList(result);
+        return result;
     }
 
     @GetMapping("/brand")
     public List<Map<String, Object>> getBrandData() {
         // TODO: 合作者需要实现从 'brand_sales' 表读取数据
-        // return brandRepository.findTop10ByOrderByTotalSalesDesc();
-        // 返回模拟数据
         List<Map<String, Object>> result = new ArrayList<>();
 
         Map<String, Object> item1 = new HashMap<>();
@@ -90,6 +97,88 @@ public class DataViewController {
         item5.put("value", 65400);
         result.add(item5);
 
-        return Collections.unmodifiableList(result);
+        return result;
     }
-}
+
+    // --- 新增API端点，提供模拟数据 ---
+
+    @GetMapping("/age")
+    public List<Map<String, Object>> getAgeData() {
+        // TODO: 合作者需要实现从 'age_distribution' 表读取数据
+        // 真实实现: return ageDistributionRepository.findAll();
+        // 返回模拟数据
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("name", "18岁以下");
+        item1.put("value", 350);
+        result.add(item1);
+
+        Map<String, Object> item2 = new HashMap<>();
+        item2.put("name", "18-24岁");
+        item2.put("value", 860);
+        result.add(item2);
+
+        Map<String, Object> item3 = new HashMap<>();
+        item3.put("name", "25-34岁");
+        item3.put("value", 1120);
+        result.add(item3);
+
+        Map<String, Object> item4 = new HashMap<>();
+        item4.put("name", "35-44岁");
+        item4.put("value", 640);
+        result.add(item4);
+
+        Map<String, Object> item5 = new HashMap<>();
+        item5.put("name", "45岁以上");
+        item5.put("value", 280);
+        result.add(item5);
+
+        return result;
+    }
+
+    @GetMapping("/category")
+    public List<Map<String, Object>> getCategoryData() {
+        // TODO: 合作者需要实现从 'category_sales' 表读取数据
+        // 真实实现: return categorySalesRepository.findAllByOrderByTotalSalesDesc();
+        // 返回模拟数据
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        Map<String, Object> item1 = new HashMap<>();
+        item1.put("name", "家用电器");
+        item1.put("value", 325400.50);
+        result.add(item1);
+
+        Map<String, Object> item2 = new HashMap<>();
+        item2.put("name", "手机数码");
+        item2.put("value", 289800.00);
+        result.add(item2);
+
+        Map<String, Object> item3 = new HashMap<>();
+        item3.put("name", "服装鞋包");
+        item3.put("value", 215600.80);
+        result.add(item3);
+
+        Map<String, Object> item4 = new HashMap<>();
+        item4.put("name", "美妆护肤");
+        item4.put("value", 189300.20);
+        result.add(item4);
+
+        Map<String, Object> item5 = new HashMap<>();
+        item5.put("name", "母婴用品");
+        item5.put("value", 152100.00);
+        result.add(item5);
+
+        Map<String, Object> item6 = new HashMap<>();
+        item6.put("name", "食品生鲜");
+        item6.put("value", 113500.60);
+        result.add(item6);
+
+        Map<String, Object> item7 = new HashMap<>();
+        item7.put("name", "图书音像");
+        item7.put("value", 87600.00);
+        result.add(item7);
+
+        return result;
+    }
+}    
