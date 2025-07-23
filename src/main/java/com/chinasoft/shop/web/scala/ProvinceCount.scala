@@ -12,14 +12,14 @@ object ProvinceCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("ProvinceCount")
-      .setMaster("local[*]")
+
     val sc: SparkContext = new SparkContext(conf)
 
     // 数据库配置（不变）
     val driver = "com.mysql.cj.jdbc.Driver"
-    val url = "jdbc:mysql://localhost:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
+    val url = "jdbc:mysql://172.20.10.3:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
     val user = "root"
-    val password = "lxy040310"
+    val password = "wqs620429"
     val sourceTable = "data"
     val resultTable = "num_of_province"
 

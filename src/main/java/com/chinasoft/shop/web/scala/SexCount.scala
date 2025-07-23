@@ -12,15 +12,15 @@ object SexCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("SexCount")  // 性别(sex)统计
-      .setMaster("local[*]")
+
       .set("spark.hadoop.validateOutputSpecs", "false")
     val sc: SparkContext = new SparkContext(conf)
 
     // 数据库配置
     val driver = "com.mysql.cj.jdbc.Driver"
-    val url = "jdbc:mysql://localhost:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
+    val url = "jdbc:mysql://172.20.10.3:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
     val user = "root"
-    val password = "root123"
+    val password = "wqs620429"
     val sourceTable = "data"  // 假设原表名不变
     val resultTable = "gender_distribution"  // 结果表名，体现sex统计
 
@@ -107,7 +107,7 @@ object SexCount {
     }
 
     // 将结果写入CSV文件（文件名和表头适配sex）
-    val csvOutputPath = "C:/Users/10537/Desktop/num_of_sex.csv"
+    val csvOutputPath = "C:/Users/lxy18/Desktop/num_of_sex.csv"
     writeToCsv(sexCountRDD, csvOutputPath)
 
     sc.stop()

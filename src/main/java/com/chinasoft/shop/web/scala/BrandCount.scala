@@ -12,15 +12,15 @@ object BrandCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("BrandSalesCount")
-      .setMaster("local[*]")
+
       .set("spark.hadoop.validateOutputSpecs", "false")
     val sc: SparkContext = new SparkContext(conf)
 
     // 数据库配置
     val driver = "com.mysql.cj.jdbc.Driver"
-    val url = "jdbc:mysql://localhost:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
+    val url = "jdbc:mysql://172.20.10.3:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
     val user = "root"
-    val password = "root123"
+    val password = "wqs620429"
     val sourceTable = "data"
     val resultTable = "brand_sales"
 
@@ -116,7 +116,7 @@ object BrandCount {
     }
 
     // 将Top10结果写入CSV文件
-    val csvOutputPath = "C:/Users/10537/Desktop/top10_brand_sales.csv"
+    val csvOutputPath = "C:/Users/lxy18/Desktop/top10_brand_sales.csv"
     writeToCsv(top10BrandSalesRDD, csvOutputPath)
 
     sc.stop()

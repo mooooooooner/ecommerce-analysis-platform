@@ -15,14 +15,14 @@ object MoneyCount {
     // 1. 初始化Spark配置和上下文
     val conf: SparkConf = new SparkConf()
       .setAppName("MoneyCount")
-      .setMaster("local[*]")  // 本地模式，生产环境移除
+
     val sc: SparkContext = new SparkContext(conf)
 
     // 2. 数据库连接配置（使用你的数据库参数）
     val driver = "com.mysql.cj.jdbc.Driver"
-    val url = "jdbc:mysql://localhost:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
+    val url = "jdbc:mysql://172.20.10.3:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
     val user = "root"
-    val password = "lxy040310"
+    val password = "wqs620429"
     val sourceTable = "data"  // 源数据表名（与ProvinceCount相同）
     val resultTable = "daily_sales"  // 存储每日销售额的表名
 

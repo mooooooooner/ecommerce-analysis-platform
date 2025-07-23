@@ -213,12 +213,24 @@ async function initCategoryChart(baseUrl) {
     try {
         const response = await fetch(`${baseUrl}/category`);
         const data = await response.json();
-        
-        // 为了条形图从上到下按销售额降序显示，需要对数据进行升序排序
-        const sortedData = data.sort((a, b) => a.value - b.value);
 
-        const categories = sortedData.map(item => item.name);
-        const sales = sortedData.map(item => item.value);
+        // 按销售额降序排序（从高到低）
+        const sortedData = data.sort((a, b) => b.value - a.value);
+
+        // 获取Top 10数据
+        const top10Data = sortedData.slice(0, 10);
+
+        // 打印Top 10信息到控制台
+        console.log('===== 销售额Top 10类别 =====');
+        top10Data.forEach((item, index) => {
+            console.log(`${index + 1}. ${item.name}: ¥${item.value}`);
+        });
+
+        // 为了在图表中从上到下按销售额降序显示，对Top 10数据进行升序排序
+        const chartData = [...top10Data].sort((a, b) => a.value - b.value);
+
+        const categories = chartData.map(item => item.name);
+        const sales = chartData.map(item => item.value);
 
         const option = {
             tooltip: {
@@ -226,7 +238,7 @@ async function initCategoryChart(baseUrl) {
                 axisPointer: { type: 'shadow' },
                 formatter: '{b}<br/>销售额: ¥{c}'
             },
-            xAxis: { 
+            xAxis: {
                 type: 'value',
                 axisLabel: {
                     formatter: '¥{value}'
@@ -239,7 +251,7 @@ async function initCategoryChart(baseUrl) {
                 type: 'bar',
                 data: sales,
                 itemStyle: {
-                    color: '#ff9900' // 使用新颜色
+                    color: '#ff9900'
                 }
             }]
         };
@@ -249,4 +261,4 @@ async function initCategoryChart(baseUrl) {
     } finally {
         chart.hideLoading();
     }
-}    
+}

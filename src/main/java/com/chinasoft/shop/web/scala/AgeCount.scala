@@ -13,14 +13,14 @@ object AgeCount {
     // 1. 初始化Spark配置和上下文
     val conf: SparkConf = new SparkConf()
       .setAppName("AgeCount")
-      .setMaster("local[*]")
+
     val sc: SparkContext = new SparkContext(conf)
 
     // 2. 数据库连接配置
     val driver = "com.mysql.cj.jdbc.Driver"
-    val url = "jdbc:mysql://localhost:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
+    val url = "jdbc:mysql://172.20.10.3:3306/shixi_keshe?useSSL=false&serverTimezone=UTC&characterEncoding=utf8"
     val user = "root"
-    val password = "123456"
+    val password = "wqs620429"
     val sourceTable = "data"  // 源数据表名
     val resultTable = "age_distribution"  // 存储年龄分布的表名
 
@@ -106,7 +106,7 @@ object AgeCount {
     }
 
     // 8. 将结果写入CSV文件
-    val csvOutputPath = "D:\\course\\pract\\BigData\\age_distribution.csv"
+    val csvOutputPath = "C:/Users/lxy18/Desktop/age_distribution.csv"
     writeToCsv(ageDistributionRDD, csvOutputPath)
 
     // 9. 关闭Spark上下文
