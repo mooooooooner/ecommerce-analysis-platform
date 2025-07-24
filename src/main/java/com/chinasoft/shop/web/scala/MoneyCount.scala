@@ -15,7 +15,7 @@ object MoneyCount {
     // 1. 初始化Spark配置和上下文
     val conf: SparkConf = new SparkConf()
       .setAppName("MoneyCount")
-
+      .setMaster("kkwang:7077")  // 本地模式，生产环境移除
     val sc: SparkContext = new SparkContext(conf)
 
     // 2. 数据库连接配置（使用你的数据库参数）

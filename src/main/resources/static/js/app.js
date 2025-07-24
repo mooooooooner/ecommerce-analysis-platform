@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const API_BASE_URL = 'http://localhost:8080/api/data';
+    const API_BASE_URL = 'http://172.20.10.3:8080/api/data';
 
     // 初始化所有图表
     initSalesChart(API_BASE_URL);

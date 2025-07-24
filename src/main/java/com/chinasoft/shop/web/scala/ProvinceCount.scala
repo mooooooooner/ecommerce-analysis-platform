@@ -12,7 +12,7 @@ object ProvinceCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("ProvinceCount")
-
+      .setMaster("kkwang:7077")
     val sc: SparkContext = new SparkContext(conf)
 
     // 数据库配置（不变）

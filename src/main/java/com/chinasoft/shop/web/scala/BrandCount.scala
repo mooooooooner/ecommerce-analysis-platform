@@ -12,7 +12,7 @@ object BrandCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("BrandSalesCount")
-
+      .setMaster("kkwang:7077")
       .set("spark.hadoop.validateOutputSpecs", "false")
     val sc: SparkContext = new SparkContext(conf)
 
@@ -116,7 +116,7 @@ object BrandCount {
     }
 
     // 将Top10结果写入CSV文件
-    val csvOutputPath = "C:/Users/lxy18/Desktop/top10_brand_sales.csv"
+    val csvOutputPath = "C:/Users/10537/Desktop/top10_brand_sales.csv"
     writeToCsv(top10BrandSalesRDD, csvOutputPath)
 
     sc.stop()

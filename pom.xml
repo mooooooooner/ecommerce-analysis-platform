@@ -27,7 +27,7 @@
     </properties>
 
     <dependencies>
-        <!-- Spark 核心依赖 -->
+    <!-- Spark 核心依赖 -->
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-core_${scala.version}</artifactId>

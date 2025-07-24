@@ -12,7 +12,7 @@ object SexCount {
   def main(args: Array[String]): Unit = {
     val conf: SparkConf = new SparkConf()
       .setAppName("SexCount")  // 性别(sex)统计
-
+      .setMaster("kkwang:7077")
       .set("spark.hadoop.validateOutputSpecs", "false")
     val sc: SparkContext = new SparkContext(conf)
 
@@ -107,7 +107,7 @@ object SexCount {
     }
 
     // 将结果写入CSV文件（文件名和表头适配sex）
-    val csvOutputPath = "C:/Users/lxy18/Desktop/num_of_sex.csv"
+    val csvOutputPath = "C:/Users/10537/Desktop/num_of_sex.csv"
     writeToCsv(sexCountRDD, csvOutputPath)
 
     sc.stop()

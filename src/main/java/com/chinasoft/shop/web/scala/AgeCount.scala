@@ -13,7 +13,7 @@ object AgeCount {
     // 1. 初始化Spark配置和上下文
     val conf: SparkConf = new SparkConf()
       .setAppName("AgeCount")
-
+      .setMaster("kkwang:7077")
     val sc: SparkContext = new SparkContext(conf)
 
     // 2. 数据库连接配置
@@ -106,7 +106,7 @@ object AgeCount {
     }
 
     // 8. 将结果写入CSV文件
-    val csvOutputPath = "C:/Users/lxy18/Desktop/age_distribution.csv"
+    val csvOutputPath = "D:\\course\\pract\\BigData\\age_distribution.csv"
     writeToCsv(ageDistributionRDD, csvOutputPath)
 
     // 9. 关闭Spark上下文
